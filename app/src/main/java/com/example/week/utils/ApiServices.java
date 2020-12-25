@@ -1,4 +1,4 @@
-package com.example.week.api;
+package com.example.week.utils;
 
 import java.util.HashMap;
 
@@ -10,13 +10,15 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Url;
 
-public interface ApiService {
+public interface ApiServices {
     @GET
     Observable<ResponseBody> get(@Url String url);
-    @POST
+
     @FormUrlEncoded
+    @POST
     Observable<ResponseBody> post(@Url String url);
-    @POST
+
     @FormUrlEncoded
+    @POST
     Observable<ResponseBody> post(@Url String url, @FieldMap HashMap<String,String> map);
 }

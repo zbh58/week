@@ -1,45 +1,138 @@
 package com.example.week;
 
-import android.graphics.Color;
-import android.os.Bundle;
-
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.VirtualLayout;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
-import com.alibaba.android.vlayout.VirtualLayoutManager;
-import com.alibaba.android.vlayout.layout.GridLayoutHelper;
+import android.os.Bundle;
+import android.view.MenuItem;
 
-import java.util.ArrayList;
+import com.example.week.R;
+import com.example.week.fragment.ClassifyFragment;
+import com.example.week.fragment.HomeFragment;
+import com.example.week.fragment.MyFragment;
+import com.example.week.fragment.ShoppingFragment;
+import com.example.week.fragment.SpecialFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private RecyclerView rcy;
+    private BottomNavigationView bottomNavigationView;
+    private HomeFragment homeFragment;
+    private SpecialFragment specialFragment;
+    private ClassifyFragment classifyFragment;
+    private ShoppingFragment shoppingFragment;
+    private MyFragment myFragment;
+    private Fragment[] fragments;
+    private int lastFragment;//用于记录上个选择的Fragment
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initView();
+        //权限检查和申请
+        initFragment();
     }
 
-    private void initView() {
-        rcy = findViewById(R.id.rcy);
-        VirtualLayoutManager layoutManager = new VirtualLayoutManager(this);
-        RecyclerView.RecycledViewPool viewPool = new RecyclerView.RecycledViewPool();
-        rcy.setRecycledViewPool(viewPool);
-        viewPool.setMaxRecycledViews(0,10);
-        GridLayoutHelper gridLayoutHelper = new GridLayoutHelper(3);
-        gridLayoutHelper.setItemCount(6);
-        gridLayoutHelper.setPadding(0,0,0,0);
-        gridLayoutHelper.setMargin(0,0,0,0);
-        gridLayoutHelper.setBgColor(Color.GRAY);
-        gridLayoutHelper.setAspectRatio(4);
-        gridLayoutHelper.setWeights(new float[]{100,100});
-        gridLayoutHelper.setGap(0);
-        gridLayoutHelper.setAutoExpand(true);
-        gridLayoutHelper.setSpanCount(5);
-        ArrayList<Object> strings = new ArrayList<>();
+    //初始化fragment和fragment数组
+    private void initFragment()
+    {
+
+        homeFragment = new HomeFragment();
+        specialFragment = new SpecialFragment();
+        classifyFragment = new ClassifyFragment();
+        shoppingFragment = new ShoppingFragment();
+        myFragment = new MyFragment();
+
+        fragments = new Fragment[]{homeFragment,specialFragment,classifyFragment,shoppingFragment,myFragment};
+        lastFragment = 0;
+        getSupportFragmentManager().beginTransaction().replace(R.id.ll,homeFragment).show(homeFragment).commit();
+        bottomNavigationView = findViewById(R.id.bnv);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(changeFragment);
+    }
+    //判断选择的菜单
+    private BottomNavigationView.OnNavigationItemSelectedListener changeFragment= new BottomNavigationView.OnNavigationItemSelectedListener() {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+            switch (item.getItemId())
+            {
+                case R.id.menu1:
+                {
+                    if(lastFragment!=0)
+                    {
+                        switchFragment(lastFragment,0);
+                        lastFragment=0;
+                    }
+                    return true;
+                }
+                case R.id.menu2:
+                {
+                    if(lastFragment!=1)
+                    {
+                        switchFragment(lastFragment,1);
+                        lastFragment=1;
+
+                    }
+
+                    return true;
+                }
+                case R.id.menu3:
+                {
+                    if(lastFragment!=2)
+                    {
+                        switchFragment(lastFragment,2);
+                        lastFragment=2;
+
+                    }
+
+                    return true;
+                }
+                case R.id.menu4:
+                {
+                    if(lastFragment!=3)
+                    {
+                        switchFragment(lastFragment,3);
+                        lastFragment=3;
+
+                    }
+
+                    return true;
+                }
+                case R.id.menu5:
+                {
+                    if(lastFragment!=4)
+                    {
+                        switchFragment(lastFragment,4);
+                        lastFragment=4;
+
+                    }
+
+                    return true;
+                }
+
+            }
+
+
+            return false;
+        }
+    };
+
+
+    //切换Fragment
+    private void switchFragment(int lastfragment,int index)
+    {
+        FragmentTransaction transaction =getSupportFragmentManager().beginTransaction();
+        transaction.hide(fragments[lastfragment]);//隐藏上个Fragment
+
+        if(fragments[index].isAdded()==false)
+        {
+            transaction.add(R.id.ll,fragments[index]);
+        }
+        transaction.show(fragments[index]).commitAllowingStateLoss();
+
 
     }
 }
