@@ -13,13 +13,14 @@ import com.alibaba.android.vlayout.LayoutHelper;
 import com.alibaba.android.vlayout.layout.SingleLayoutHelper;
 import com.example.week.R;
 
-
 public class MyTowAdapter extends DelegateAdapter.Adapter {
 
     private SingleLayoutHelper singleLayoutHelper;
+    private String title;
 
-    public MyTowAdapter(SingleLayoutHelper singleLayoutHelper) {
+    public MyTowAdapter(SingleLayoutHelper singleLayoutHelper, String title) {
         this.singleLayoutHelper = singleLayoutHelper;
+        this.title = title;
     }
 
     @Override
@@ -37,7 +38,7 @@ public class MyTowAdapter extends DelegateAdapter.Adapter {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         TextViewHolder textViewHolder = (TextViewHolder) holder;
-        textViewHolder.name.setText("品牌制造商直供");
+        textViewHolder.name.setText(title);
     }
 
     @Override
